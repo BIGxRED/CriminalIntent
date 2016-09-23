@@ -30,6 +30,9 @@ public class CrimeListFragment extends Fragment {
     private int mAdapterPosition;
     private boolean mSubtitleVisible;
 
+    public static final String EXTRA_SUBTITLE_VISIBLE =
+            "com.palarz.mike.criminalintent.subtitle_visible";
+
     @Override
     public void onResume(){
         super.onResume();
@@ -42,6 +45,8 @@ public class CrimeListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager( new LinearLayoutManager(getActivity()));
+
+        mSubtitleVisible = getActivity().getIntent().getBooleanExtra(EXTRA_SUBTITLE_VISIBLE,false);
 
         updateUI();
         return view;
@@ -88,10 +93,9 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v){
-//            mAdapterPosition = getAdapterPosition();
             mAdapterPosition = mCrimeRecyclerView.getChildAdapterPosition(v);
-//            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getID());
-            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getID());
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getID(),
+                    mSubtitleVisible);
             startActivity(intent);
         }
     }
@@ -147,7 +151,8 @@ public class CrimeListFragment extends Fragment {
             case R.id.menu_item_new_crime:
                 Crime crime = new Crime();
                 CrimeLab.get(getActivity()).addCrime(crime);
-                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
+                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID(),
+                        mSubtitleVisible);
                 startActivity(intent);
                 return true;
             case R.id.menu_item_show_subtitle:

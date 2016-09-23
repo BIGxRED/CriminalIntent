@@ -1,5 +1,6 @@
 package com.palarz.mike.criminalintent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -21,10 +22,12 @@ public class CrimePagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
+    private boolean mSubtitleVisible;
 
-    public static Intent newIntent(Context packageContext, UUID crimeID){
+    public static Intent newIntent(Context packageContext, UUID crimeID, boolean showSubtitle){
         Intent intent = new Intent(packageContext, CrimePagerActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeID);
+        intent.putExtra(CrimeListFragment.EXTRA_SUBTITLE_VISIBLE, showSubtitle);
         return intent;
     }
 
@@ -33,6 +36,8 @@ public class CrimePagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crime_pager);
         UUID crimeID = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        mSubtitleVisible = getIntent().
+                getBooleanExtra(CrimeListFragment.EXTRA_SUBTITLE_VISIBLE,false);
 
         mViewPager = (ViewPager) findViewById(R.id.activity_crime_pager_view_pager);
         mCrimes = CrimeLab.get(this).getCrimes();
@@ -56,5 +61,13 @@ public class CrimePagerActivity extends AppCompatActivity {
                 break;
             }
         }
+    }
+
+    @Override
+    public Intent getParentActivityIntent (){
+        super.getParentActivityIntent();
+        Intent intent = new Intent(this, CrimeListActivity.class);
+        intent.putExtra(CrimeListFragment.EXTRA_SUBTITLE_VISIBLE, mSubtitleVisible);
+        return intent;
     }
 }
