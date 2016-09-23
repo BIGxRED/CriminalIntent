@@ -50,7 +50,6 @@ public class CrimeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID crimeID = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeID);
-//        mCrime = new Crime();
     }
 
     @Override
@@ -77,16 +76,11 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) v.findViewById(R.id.crime_date);
-//        SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.LONG);
-//        dateFormat.applyPattern("EEEE, MMMM dd, yyyy");
-//        mDateButton.setText(dateFormat.format(mCrime.getDate()));
-//        mDateButton.setEnabled(false);
         updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 FragmentManager manager = getFragmentManager();
-//                DatePickerFragment dialog = new DatePickerFragment();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
@@ -115,7 +109,6 @@ public class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
-//            mDateButton.setText(mCrime.getDate().toString());
         }
     }
 
