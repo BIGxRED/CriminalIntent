@@ -16,4 +16,5 @@
     </plurals>
     <string name="no_new_crimes_header">No crimes yet. Would you like to create one?</string>
     <string name="no_new_crimes_button">Add crime</string>
+    <string name="delete_crime">Delete crime</string>
 </resources>

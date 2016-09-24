@@ -86,6 +86,12 @@ public class CrimeListFragment extends Fragment {
         }
 
         if(crimes.isEmpty()){
+            //If the view had previously been made to go away because the list had been previously
+            //been populated but it's empty again (via deleting all of the crimes), reset the
+            //view's visibility
+            if (mEmptyView.getVisibility() == View.GONE)
+                mEmptyView.setVisibility(View.VISIBLE);
+
             mAddFirstCrime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
