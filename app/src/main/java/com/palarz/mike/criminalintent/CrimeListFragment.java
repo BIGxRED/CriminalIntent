@@ -83,6 +83,7 @@ public class CrimeListFragment extends Fragment {
         }
         else{
             mAdapter.notifyItemChanged(mAdapterPosition);
+            mAdapter.setCrimes(crimes);
         }
 
         if(crimes.isEmpty()){
@@ -162,6 +163,10 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemCount(){
             return mCrimes.size();
+        }
+
+        public void setCrimes(List<Crime> crimes){
+            mCrimes = crimes;
         }
 
     }
