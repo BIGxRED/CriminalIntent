@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
@@ -47,6 +48,7 @@ public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String DIALOG_PHOTO = "DialogPhoto";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 1;
     private static final int REQUEST_PERMISSION = 2;
@@ -219,7 +221,9 @@ public class CrimeFragment extends Fragment {
                 (captureImage.resolveActivity(packageManager) != null);
         mPhotoButton.setEnabled(canTakePhoto);
         if(canTakePhoto){
-            Uri uri = Uri.fromFile(mPhotoFile);
+//            Uri uri = Uri.fromFile(mPhotoFile);
+            Uri uri = FileProvider.getUriForFile(getContext(),
+                    getContext().getApplicationContext().getPackageName() + ".provider", mPhotoFile);
             captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
 
@@ -231,6 +235,15 @@ public class CrimeFragment extends Fragment {
         });
 
         mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
+        mPhotoView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                FragmentManager manager = getFragmentManager();
+                PhotoViewFragment dialog = new PhotoViewFragment();
+                dialog.getPhotoFile(mPhotoFile);
+                dialog.show(manager, DIALOG_PHOTO);
+            }
+        });
         updatePhotoView();
 
         return v;
