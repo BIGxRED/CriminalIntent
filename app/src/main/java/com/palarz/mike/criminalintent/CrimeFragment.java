@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -25,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -66,6 +68,7 @@ public class CrimeFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
     private File mPhotoFile;
+    private Point mPhotoViewSize;
 
 
     public static CrimeFragment newInstance(UUID crimeID){
@@ -240,11 +243,29 @@ public class CrimeFragment extends Fragment {
             public void onClick(View v){
                 FragmentManager manager = getFragmentManager();
                 PhotoViewFragment dialog = new PhotoViewFragment();
-                dialog.getPhotoFile(mPhotoFile);
+                PhotoViewFragment.getPhotoFile(mPhotoFile);
                 dialog.show(manager, DIALOG_PHOTO);
             }
         });
-        updatePhotoView();
+
+        /** CHAPTER 16 CHALLENGE #2 **/
+        /**
+         * I don't completely understand how this code works, it was taken from the Big Nerd
+         * Ranch forum.
+         */
+
+        final ViewTreeObserver observer = mPhotoView.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout(){
+                        boolean isFirstPass = (mPhotoViewSize == null);
+                        mPhotoViewSize = new Point();
+                        mPhotoViewSize.set(mPhotoView.getWidth(), mPhotoView.getHeight());
+
+                        if (isFirstPass)
+                            updatePhotoView();
+                    }
+                });
 
         return v;
     }
@@ -333,11 +354,17 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updatePhotoView(){
-        if(mPhotoFile == null || !mPhotoFile.exists())
+        if(mPhotoFile == null || !mPhotoFile.exists()) {
             mPhotoView.setImageDrawable(null);
+            mPhotoView.setEnabled(false);
+        }
         else{
-            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            Bitmap bitmap = (mPhotoViewSize == null) ?
+                    PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity()) :
+                    PictureUtils.getScaledBitmap(mPhotoFile.getPath(), mPhotoViewSize.x,
+                            mPhotoViewSize.y);
             mPhotoView.setImageBitmap(bitmap);
+            mPhotoView.setEnabled(true);
         }
     }
 

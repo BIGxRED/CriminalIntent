@@ -22,9 +22,9 @@ public class PhotoViewFragment extends DialogFragment {
     private static final String TAG = "PhotoViewFragment";
 
     private ImageView mPhotoView;
-    private File mPhotoFile;
+    private static File mPhotoFile;
 
-    /** CHAPTER 16 CHALLENGE **/
+    /** CHAPTER 16 CHALLENGE #1 **/
 
     //This was originally written by following what had been done for the date dialog; this is
     //still an acceptable approach, but an alternative was also found via the Big Nerd Ranch forum
@@ -37,7 +37,7 @@ public class PhotoViewFragment extends DialogFragment {
     }
 
     //This method also gets the job done
-    public void getPhotoFile(File file){
+    public static void getPhotoFile(File file){
         mPhotoFile = file;
     }
 
