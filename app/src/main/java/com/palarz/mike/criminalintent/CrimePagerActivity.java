@@ -1,11 +1,10 @@
 package com.palarz.mike.criminalintent;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,7 @@ import java.util.UUID;
 /**
  * Created by QNP684 on 9/10/2016.
  */
-public class CrimePagerActivity extends AppCompatActivity {
+public class CrimePagerActivity extends AppCompatActivity implements CrimeFragment.Callbacks {
     private static final String EXTRA_CRIME_ID = "com.palarz.mike.criminalintent.crime_id";
 
 
@@ -29,6 +28,16 @@ public class CrimePagerActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_CRIME_ID, crimeID);
         intent.putExtra(CrimeListFragment.EXTRA_SUBTITLE_VISIBLE, showSubtitle);
         return intent;
+    }
+
+    /**
+     *We currently are not using this method, it is only used by the CrimeFragment class. However,
+     * we still need to provide a definition of this method since both CrimeListActivity and
+     * CrimePagerActivity will host a CrimeFragment: CrimeListActivity on tablets and
+     * CrimePagerActivity on phones.
+     */
+    @Override
+    public void onCrimeUpdated(Crime crime){
     }
 
     @Override
